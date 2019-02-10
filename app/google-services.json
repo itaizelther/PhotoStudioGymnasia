@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "923401064425",
+    "firebase_url": "https://photostudiogymnasia.firebaseio.com",
+    "project_id": "photostudiogymnasia",
+    "storage_bucket": "photostudiogymnasia.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:923401064425:android:e48e471e70d31a87",
+        "android_client_info": {
+          "package_name": "il.appclass.zelther.photostudiogymnasia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "923401064425-pdu7kvp17khg1f64ktkcj7ekhgjqv6p5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChZborX7VeHNyDBqJVVq_-JupsK0Xl7FM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

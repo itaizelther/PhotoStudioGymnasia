@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+    android:paddingTop="50dp">
+
+    <!-- logo -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="אפליקצית הציוד של מגמת צילום"
+        android:layout_gravity="center"
+        android:textSize="25sp"
+        android:fontFamily="@font/assistant_font"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="הגימנסיה העברית הרצליה"
+        android:textSize="20sp"
+        android:fontFamily="@font/assistant_font"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="שאילת ציוד"
+            android:textSize="30dp"
+            android:fontFamily="@font/assistant_font"
+            android:id="@+id/btnLend"
+            android:onClick="onButtonAction"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="החזרת ציוד"
+            android:textSize="30dp"
+            android:fontFamily="@font/assistant_font"
+            android:id="@+id/btnReturn"
+            android:onClick="onButtonAction"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ניהול מאגר נתונים"
+            android:fontFamily="@font/assistant_font"
+            android:textSize="20dp"
+            android:textColor="#6B117A"
+            android:visibility="gone"
+            android:id="@+id/btnManageDatabase"
+            android:onClick="onButtonAction"/>
+
+    </LinearLayout>
+
+</LinearLayout>
