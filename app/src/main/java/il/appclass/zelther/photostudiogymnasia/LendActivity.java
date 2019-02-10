@@ -55,6 +55,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
         username = getIntent().getStringExtra("username");
 
         TextView tvLendTitle = findViewById(R.id.tvLendTitle);
+        tvEmptyList = findViewById(R.id.tvEmptyList);
 
         if(toLend) {
             tvLendTitle.setText("שאילת ציוד");
@@ -64,7 +65,6 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
             tvLendTitle.setText("החזרת ציוד");
             tvEmptyList.setText("לא השאלת אף חפץ");
         }
-        tvEmptyList = findViewById(R.id.tvEmptyList);
         animLoading = findViewById(R.id.animLoading);
         searchItems = findViewById(R.id.searchItems);
         lvLend = findViewById(R.id.lvLend);
