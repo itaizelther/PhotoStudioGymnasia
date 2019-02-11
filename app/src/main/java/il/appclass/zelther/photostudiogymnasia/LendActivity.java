@@ -46,6 +46,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
     private boolean toLend; //the user wants to lend or return
     private String username; //user's name
     private TextView tvEmptyList; // TextView to notify if the list is empty
+    private final int REQUEST_BARCODE_CODE = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
 
         availableItems = new ArrayList<>();
         adapterItems = new ArrayAdapter<StudioItem>(this,android.R.layout.activity_list_item,android.R.id.text1,availableItems) {
+
           @Override
           public View getView(int position, View convertView, ViewGroup parent) {
               View view = super.getView(position, convertView, parent);
@@ -210,7 +212,43 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
      */
     public void onBarcodeRequest(View v) {
         Intent intent = new Intent(this, BarcodeScanActivity.class);
-        startActivityForResult(intent, 0);
+        startActivityForResult(intent, REQUEST_BARCODE_CODE);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @android.support.annotation.Nullable Intent data) {
+        if(requestCode == REQUEST_BARCODE_CODE) {
+            if(resultCode == BarcodeScanActivity.RESULT_FAILED_CAMERA_ACCESS) {
+                AlertDialog alertDialog = new AlertDialog.Builder(this).setMessage("כשל בגישה למצלמה - ודא שאתה מאשר את גישת המצלמה.")
+                        .setTitle("שגיאה!").create();
+                alertDialog.show();
+            } else if(resultCode == RESULT_OK) {
+                String itemID = data.getStringExtra("barcodeValue");
+                StudioItem item = getItemWithIDFromList(itemID);
+                if(item != null) {
+                    chooseItem(item);
+                } else {
+                    AlertDialog alertDialog = new AlertDialog.Builder(this).setMessage("הפריט שאת/ה מנסה להשאיל כבר נלקח - האם את/ה בטוח/ה שהוא זמין?")
+                            .setTitle("שגיאה!").create();
+                    alertDialog.show();
+                }
+            }
+        }
+    }
+
+    /**
+     * Gets id of item, checks if it is in the available items list, and returns the desired item.
+     * @param id Item's id
+     * @return The item with the id given, or null if it does not exist in the list.
+     */
+    private StudioItem getItemWithIDFromList(String id) {
+        for(StudioItem si : availableItems) {
+            if(si.getId().equals(id)) {
+                return si;
+            }
+        }
+        return null;
     }
 
     //part of query text interface I must implement

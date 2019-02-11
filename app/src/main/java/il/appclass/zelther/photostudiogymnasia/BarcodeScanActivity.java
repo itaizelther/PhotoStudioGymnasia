@@ -1,7 +1,9 @@
 package il.appclass.zelther.photostudiogymnasia;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +25,8 @@ public class BarcodeScanActivity extends AppCompatActivity {
     SurfaceView surfaceView;
     BarcodeDetector barcodeDetector;
     CameraSource cameraSource;
-    private final int REQUEST_CAMERA_PERMISSION_CODE = 50;
+    private final int REQUEST_CAMERA_PERMISSION_CODE = 2;
+    public final static int RESULT_FAILED_CAMERA_ACCESS = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,7 @@ public class BarcodeScanActivity extends AppCompatActivity {
 
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                if (ActivityCompat.checkSelfPermission(BarcodeScanActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ActivityCompat.checkSelfPermission(BarcodeScanActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[] {Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION_CODE);
                     return;
                 }
@@ -50,9 +53,7 @@ public class BarcodeScanActivity extends AppCompatActivity {
             }
 
             @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-            }
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) { }
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
@@ -68,7 +69,10 @@ public class BarcodeScanActivity extends AppCompatActivity {
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 SparseArray<Barcode> qrCodes = detections.getDetectedItems();
                 if(qrCodes.size() != 0) {
-                    Log.d("BarcodeDetect",qrCodes.valueAt(0).displayValue);
+                    Intent barcodeDataIntent = new Intent();
+                    barcodeDataIntent.putExtra("barcodeValue", qrCodes.valueAt(0).displayValue);
+                    setResult(RESULT_OK, barcodeDataIntent);
+                    finish();
                 }
             }
         });
@@ -76,8 +80,9 @@ public class BarcodeScanActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == REQUEST_CAMERA_PERMISSION_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            //TODO accept permession
+        if(requestCode == REQUEST_CAMERA_PERMISSION_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+            setResult(RESULT_FAILED_CAMERA_ACCESS);
+            finish();
         }
     }
 }
