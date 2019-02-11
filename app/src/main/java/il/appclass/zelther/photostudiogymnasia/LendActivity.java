@@ -1,6 +1,7 @@
 package il.appclass.zelther.photostudiogymnasia;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -55,6 +56,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
         username = getIntent().getStringExtra("username");
 
         TextView tvLendTitle = findViewById(R.id.tvLendTitle);
+        tvEmptyList = findViewById(R.id.tvEmptyList);
 
         if(toLend) {
             tvLendTitle.setText("שאילת ציוד");
@@ -64,7 +66,6 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
             tvLendTitle.setText("החזרת ציוד");
             tvEmptyList.setText("לא השאלת אף חפץ");
         }
-        tvEmptyList = findViewById(R.id.tvEmptyList);
         animLoading = findViewById(R.id.animLoading);
         searchItems = findViewById(R.id.searchItems);
         lvLend = findViewById(R.id.lvLend);
@@ -201,6 +202,15 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
                 }
             });
         }
+    }
+
+    /**
+     * method for handling the barcode scan request
+     * @param v the barcode request button
+     */
+    public void onBarcodeRequest(View v) {
+        Intent intent = new Intent(this, BarcodeScanActivity.class);
+        startActivityForResult(intent, 0);
     }
 
     //part of query text interface I must implement
