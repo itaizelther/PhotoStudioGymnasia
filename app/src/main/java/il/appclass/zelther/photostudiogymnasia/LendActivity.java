@@ -102,6 +102,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
         updateList();
 
         searchItems.setOnQueryTextListener(this);
+        searchItems.clearFocus();
     }
 
 
@@ -199,7 +200,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(LendActivity.this, "שגיאה בביצוע הפעולה (001)",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LendActivity.this, "שגיאה בביצוע הפעולה - בדוק את חיבורך לאינטרנט.",Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
             });
@@ -229,7 +230,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
                 if(item != null) {
                     chooseItem(item);
                 } else {
-                    AlertDialog alertDialog = new AlertDialog.Builder(this).setMessage("הפריט שאת/ה מנסה להשאיל כבר נלקח - האם את/ה בטוח/ה שהוא זמין?")
+                    AlertDialog alertDialog = new AlertDialog.Builder(this).setMessage("הברקוד אותו סרקת לא מתאים לרשימה שאתה מחפש. האם אתה בטוח שסרקת את האחד הנכון?")
                             .setTitle("שגיאה!").create();
                     alertDialog.show();
                 }
