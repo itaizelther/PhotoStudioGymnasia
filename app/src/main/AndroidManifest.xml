@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".BarcodeScanActivity"/>
+        <activity android:name=".TeachersActivity"></activity>
+        <activity android:name=".BarcodeScanActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".LendActivity" />
         <activity android:name=".MainActivity">

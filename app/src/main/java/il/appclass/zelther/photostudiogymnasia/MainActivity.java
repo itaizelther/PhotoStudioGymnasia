@@ -145,7 +145,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.btnManageDatabase: //if a teacher wants to manage the equipment data
-                //TODO teachers screen
+                Intent teacherIntent = new Intent(this, TeachersActivity.class);
+                startActivity(teacherIntent);
                 break;
             default: break;
         }
