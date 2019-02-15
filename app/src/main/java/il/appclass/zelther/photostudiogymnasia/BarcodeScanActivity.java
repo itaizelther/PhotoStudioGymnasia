@@ -36,8 +36,8 @@ public class BarcodeScanActivity extends AppCompatActivity {
         surfaceView = findViewById(R.id.cameraPreview);
 
         barcodeDetector = new BarcodeDetector.Builder(this)
-                .setBarcodeFormats(Barcode.QR_CODE).build();
-        cameraSource = new CameraSource.Builder(this, barcodeDetector).build();
+                .setBarcodeFormats(Barcode.CODE_128).build();
+        cameraSource = new CameraSource.Builder(this, barcodeDetector).setAutoFocusEnabled(true).build();
 
         surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
 

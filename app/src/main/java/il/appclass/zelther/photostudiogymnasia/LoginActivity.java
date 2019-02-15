@@ -47,4 +47,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             finish();
         }
     }
+
+    //Overriding this so when pressing back, the user won't be able to be back on to MainActivity
+    @Override
+    public void onBackPressed() {}
 }
