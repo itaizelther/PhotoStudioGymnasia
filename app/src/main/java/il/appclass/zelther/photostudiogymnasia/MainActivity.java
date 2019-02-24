@@ -17,10 +17,15 @@ import android.widget.TextView;
 
 import com.google.firebase.FirebaseApp;
 
+/**
+ * The main screen where you can login as teacher, view credits and choose whether to lend or return equipment to the studio.
+ * @author Itai Zelther
+ * @see LendActivity
+ * @see LoginActivity
+ */
 public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences sp; //SharedPreferences instance for saving user data
-    private boolean isTeacher; // true if the user logged as teacher
     private Button btnManageDatabase; // the button exclusive for teachers
     private MenuItem menuTeacher; // menu exclusive for teachers
     private String username; // user's name
@@ -41,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * handles the login process, moving to the login activity
+     * Called if the user entered the app for the first time or hasn't logged in yet. Calling an intent to the LoginActivity.
      */
     private void askLogin() {
         Intent loginIntent = new Intent(this , LoginActivity.class);
@@ -62,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         menuInflater.inflate(R.menu.main_menu, menu);
         menuTeacher = menu.findItem(R.id.menuTeacher);
 
-        if(isTeacher = sp.getBoolean("isTeacher",false)) //hide the teacher login if is already logged in as a teacher
+        if(sp.getBoolean("isTeacher",false)) //hide the teacher login if is already logged in as a teacher
             updateTeacherLayout();
 
         return true;
@@ -94,8 +99,7 @@ public class MainActivity extends AppCompatActivity {
                         EditText etPasswordTeacher = teacherLoginDialog.findViewById(R.id.etPasswordTeacher);
                         if(etPasswordTeacher.getText().toString().equals(getResources().getString(R.string.teacher_password))) {
                             teacherLoginDialog.dismiss();
-                            isTeacher = true;
-                            sp.edit().putBoolean("isTeacher",isTeacher).commit();
+                            sp.edit().putBoolean("isTeacher",true).commit();
                             updateTeacherLayout();
                         }
                     }
@@ -125,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * When one of the main buttons is clicked. listener is set on the xml file
+     * Called when one of the main buttons is clicked. listener is set on the xml file
      * @param v the button instance
      */
     public void onButtonAction(View v) {

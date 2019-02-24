@@ -8,6 +8,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+/**
+ * This class represents the Login Screen when you first use the app. It is called when MainActivity detects it is the first time the user is using the app, or the user hasn't logged in yet.
+ * @author Itai Zelther
+ * @see MainActivity
+ */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText etName, etPassword;

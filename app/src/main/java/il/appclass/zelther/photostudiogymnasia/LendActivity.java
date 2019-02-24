@@ -34,6 +34,12 @@ import java.util.HashMap;
 
 import javax.annotation.Nullable;
 
+/**
+ * The screen where the user can lend equipment or return them. The available items in each category will show up, updating it in real time.
+ * @author Itai Zelther
+ * @see MainActivity
+ * @see BarcodeScanActivity
+ */
 public class LendActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, DialogInterface.OnClickListener {
 
     private ListView lvLend; // the ListView instance
@@ -107,7 +113,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
 
 
     /**
-     * set animation for first loading, then assign listener to the db
+     * Sets animation for first loading, then assign listener to the database in FireBase
      */
     private void updateList() {
         RotateAnimation rotateAnimation = new RotateAnimation(0,360, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
@@ -150,7 +156,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     /**
-     * handles the lending item process: dialog to confirm choosing, and updating the database in firestore
+     * Handles the lending item process: showing a dialog to confirm choosing. If chose to confirm, updates the FireBase database in OnClick method.
      * @param item the item that has been chosen
      */
     private void chooseItem(StudioItem item) {
@@ -208,8 +214,8 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     /**
-     * method for handling the barcode scan request
-     * @param v the barcode request button
+     * Called when the barcode scan button is clicked.
+     * @param v The barcode request button
      */
     public void onBarcodeRequest(View v) {
         Intent intent = new Intent(this, BarcodeScanActivity.class);

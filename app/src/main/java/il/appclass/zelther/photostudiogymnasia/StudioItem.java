@@ -1,5 +1,10 @@
 package il.appclass.zelther.photostudiogymnasia;
 
+/**
+ * This class represent an item from the studio's equipment.
+ * @author Itai Zelther
+ * @see LendActivity
+ */
 public class StudioItem {
 
     private String name, type, id, owner;
@@ -24,6 +29,12 @@ public class StudioItem {
         return id;
     }
 
+
+    /**
+     * Returns the same instance with given id.
+     * @param id The id that will be assigned to the item.
+     * @return This item instance.
+     */
     public StudioItem withId(String id) {
         this.id = id;
         return this;
