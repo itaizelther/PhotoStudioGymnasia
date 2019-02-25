@@ -22,9 +22,8 @@ import java.io.IOException;
 
 public class BarcodeScanActivity extends AppCompatActivity {
 
-    SurfaceView surfaceView;
-    BarcodeDetector barcodeDetector;
-    CameraSource cameraSource;
+
+    private CameraSource cameraSource;
     private final int REQUEST_CAMERA_PERMISSION_CODE = 2;
     public final static int RESULT_FAILED_CAMERA_ACCESS = 4;
 
@@ -33,9 +32,9 @@ public class BarcodeScanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_scan);
 
-        surfaceView = findViewById(R.id.cameraPreview);
+        SurfaceView surfaceView = findViewById(R.id.cameraPreview);
 
-        barcodeDetector = new BarcodeDetector.Builder(this)
+        BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.CODE_128).build();
         cameraSource = new CameraSource.Builder(this, barcodeDetector).setAutoFocusEnabled(true).build();
 

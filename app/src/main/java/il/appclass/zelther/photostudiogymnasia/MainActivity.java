@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btnManageDatabase = findViewById(R.id.btnManageDatabase);
-
         sp = getSharedPreferences("account", MODE_PRIVATE);
+
         if (!sp.getBoolean("logged", false)) //if not logged in
             askLogin();
         else

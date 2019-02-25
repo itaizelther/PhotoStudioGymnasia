@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -43,9 +42,7 @@ import javax.annotation.Nullable;
 public class LendActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, DialogInterface.OnClickListener {
 
     private ListView lvLend; // the ListView instance
-    private ArrayList<StudioItem> availableItems; // the array of items retrieved from the cloud
     private ArrayAdapter<StudioItem> adapterItems; // adapater for the list and ListView
-    private SearchView searchItems; // the search bar
     private View animLoading; // the view used for animation
     private StudioItem chosenItem; // the item the user currently chose
     private FirebaseFirestore db; //instance to get data from cloud
@@ -73,12 +70,12 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
             tvLendTitle.setText("החזרת ציוד");
             tvEmptyList.setText("לא השאלת אף חפץ");
         }
+
         animLoading = findViewById(R.id.animLoading);
-        searchItems = findViewById(R.id.searchItems);
+        SearchView searchItems = findViewById(R.id.searchItems);
         lvLend = findViewById(R.id.lvLend);
 
-        availableItems = new ArrayList<>();
-        adapterItems = new ArrayAdapter<StudioItem>(this,android.R.layout.activity_list_item,android.R.id.text1,availableItems) {
+        adapterItems = new ArrayAdapter<StudioItem>(this,android.R.layout.activity_list_item,android.R.id.text1,new ArrayList<StudioItem>()) {
 
           @Override
           public View getView(int position, View convertView, ViewGroup parent) {
@@ -116,12 +113,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
      * Sets animation for first loading, then assign listener to the database in FireBase
      */
     private void updateList() {
-        RotateAnimation rotateAnimation = new RotateAnimation(0,360, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
-        rotateAnimation.setDuration(4000);
-        rotateAnimation.setRepeatCount(Animation.INFINITE);
-        animLoading.startAnimation(rotateAnimation);
-
-        animLoading.setVisibility(View.VISIBLE);
+        animLoadingSwitch(true);
         lvLend.setVisibility(View.GONE);
 
         Query dbLink = db.collection("equipment").whereEqualTo("taken",!toLend);
@@ -135,15 +127,12 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
                     Log.w("LendList", "Listen failed");
                     return;
                 }
-                availableItems.clear();
+                adapterItems.clear();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    availableItems.add(doc.toObject(StudioItem.class).withId(doc.getId()));
+                    adapterItems.add(doc.toObject(StudioItem.class).withId(doc.getId()));
                 }
-                if(animLoading.getVisibility() == View.VISIBLE) {
-                    animLoading.clearAnimation();
-                    animLoading.setVisibility(View.GONE);
-                }
-                if (availableItems.isEmpty()) {
+                animLoadingSwitch(false);
+                if (adapterItems.isEmpty()) {
                     tvEmptyList.setVisibility(View.VISIBLE);
                     lvLend.setVisibility(View.GONE);
                 } else {
@@ -153,6 +142,19 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
                 }
             }
         });
+    }
+
+    private void animLoadingSwitch(boolean on) {
+        if(on) {
+            RotateAnimation rotateAnimation = new RotateAnimation(0,360, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+            rotateAnimation.setDuration(4000);
+            rotateAnimation.setRepeatCount(Animation.INFINITE);
+            animLoading.startAnimation(rotateAnimation);
+            animLoading.setVisibility(View.VISIBLE);
+        } else {
+            animLoading.clearAnimation();
+            animLoading.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -250,9 +252,9 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
      * @return The item with the id given, or null if it does not exist in the list.
      */
     private StudioItem getItemWithIDFromList(String id) {
-        for(StudioItem si : availableItems) {
-            if(si.getId().equals(id)) {
-                return si;
+        for(int i=0; i<adapterItems.getCount(); i++) {
+            if(adapterItems.getItem(i).getId().equals(id)) {
+                return adapterItems.getItem(i);
             }
         }
         return null;
