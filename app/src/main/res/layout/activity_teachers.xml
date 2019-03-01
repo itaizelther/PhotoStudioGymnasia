@@ -46,11 +46,10 @@
             android:layout_height="match_parent"
             android:id="@+id/lvTeachers"/>
 
-        <View
+        <il.appclass.zelther.photostudiogymnasia.GraySquareLoadingView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:background="@android:color/darker_gray"
             android:id="@+id/animLoading"/>
 
         <android.support.design.widget.FloatingActionButton

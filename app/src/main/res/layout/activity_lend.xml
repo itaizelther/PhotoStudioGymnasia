@@ -51,31 +51,36 @@
         android:queryHint="חיפוש"
         android:id="@+id/searchItems" />
 
-    <ListView
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/lvLend"
-        android:visibility="gone">
+        android:layout_height="match_parent">
 
-    </ListView>
 
-    <View
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="150dp"
-        android:layout_gravity="center"
-        android:background="@android:color/darker_gray"
-        android:id="@+id/animLoading"/>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/lvLend"
+            android:visibility="gone">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
-        android:layout_gravity="center"
-        android:text="אין חפצים זמינים ברשימה זאת."
-        android:fontFamily="@font/assistant_font"
-        android:textSize="15dp"
-        android:id="@+id/tvEmptyList"
-        android:visibility="gone"/>
+        </ListView>
+
+        <il.appclass.zelther.photostudiogymnasia.GraySquareLoadingView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/animLoading"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="אין חפצים זמינים ברשימה זאת."
+            android:fontFamily="@font/assistant_font"
+            android:textSize="15dp"
+            android:id="@+id/tvEmptyList"
+            android:visibility="gone"/>
+
+    </FrameLayout>
 
 </LinearLayout>

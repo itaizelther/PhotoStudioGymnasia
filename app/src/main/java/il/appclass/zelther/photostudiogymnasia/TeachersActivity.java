@@ -20,7 +20,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class TeachersActivity extends AppCompatActivity {
+public class TeachersActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
 
     private FloatingActionButton btnAddItem;
@@ -28,7 +28,7 @@ public class TeachersActivity extends AppCompatActivity {
     private SearchView searchTeachers;
     private FirebaseFirestore db;
     private ArrayAdapter<StudioItem> listAdapater;
-    private View animLoading;
+    private GraySquareLoadingView animLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class TeachersActivity extends AppCompatActivity {
         searchTeachers = findViewById(R.id.searchTeachers);
         animLoading = findViewById(R.id.animLoading);
 
-        animLoadingSwitch(true);
+        animLoading.setAnimationOn(true);
 
         listAdapater = new ArrayAdapter<StudioItem>(this, R.layout.listview_teachers, R.id.teacherListTitle, new ArrayList<StudioItem>()) {
             @Override
@@ -53,19 +53,21 @@ public class TeachersActivity extends AppCompatActivity {
                 ImageView icon = view.findViewById(R.id.teacherListIcon);
 
                 textTitle.setText(studioItem.toString());
-                textSubtitle.setText("subtitle");
+                textSubtitle.setText(studioItem.getTeachersData());
                 icon.setImageResource(getResources().getIdentifier(studioItem.getType(),"drawable",getPackageName()));
                 return view;
             }
         };
         lvTeachers.setAdapter(listAdapater);
 
+        searchTeachers.setOnQueryTextListener(this);
+
         db = FirebaseFirestore.getInstance();
 
         db.collection("equipment").orderBy("type").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                animLoadingSwitch(false);
+                animLoading.setAnimationOn(false);
                 for(DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
                     listAdapater.add(ds.toObject(StudioItem.class).withId(ds.getId()));
                 }
@@ -73,20 +75,19 @@ public class TeachersActivity extends AppCompatActivity {
         });
     }
 
-    private void animLoadingSwitch(boolean on) {
-        if(on) {
-            RotateAnimation rotateAnimation = new RotateAnimation(0,360, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
-            rotateAnimation.setDuration(4000);
-            rotateAnimation.setRepeatCount(Animation.INFINITE);
-            animLoading.startAnimation(rotateAnimation);
-            animLoading.setVisibility(View.VISIBLE);
-        } else {
-            animLoading.clearAnimation();
-            animLoading.setVisibility(View.GONE);
-        }
-    }
-
     public void filterButton(View v) {
         //TODO make filter dialog
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) { return  true; }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if(newText.isEmpty())
+            listAdapater.getFilter().filter(null);
+        else
+            listAdapater.getFilter().filter(newText);
+        return true;
     }
 }

@@ -9,8 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -43,7 +41,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private ListView lvLend; // the ListView instance
     private ArrayAdapter<StudioItem> adapterItems; // adapater for the list and ListView
-    private View animLoading; // the view used for animation
+    private GraySquareLoadingView animLoading; // the view used for animation
     private StudioItem chosenItem; // the item the user currently chose
     private FirebaseFirestore db; //instance to get data from cloud
     private boolean toLend; //the user wants to lend or return
@@ -113,7 +111,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
      * Sets animation for first loading, then assign listener to the database in FireBase
      */
     private void updateList() {
-        animLoadingSwitch(true);
+        animLoading.setAnimationOn(true);
         lvLend.setVisibility(View.GONE);
 
         Query dbLink = db.collection("equipment").whereEqualTo("taken",!toLend);
@@ -131,7 +129,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     adapterItems.add(doc.toObject(StudioItem.class).withId(doc.getId()));
                 }
-                animLoadingSwitch(false);
+                animLoading.setAnimationOn(false);
                 if (adapterItems.isEmpty()) {
                     tvEmptyList.setVisibility(View.VISIBLE);
                     lvLend.setVisibility(View.GONE);
@@ -142,19 +140,6 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
                 }
             }
         });
-    }
-
-    private void animLoadingSwitch(boolean on) {
-        if(on) {
-            RotateAnimation rotateAnimation = new RotateAnimation(0,360, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);
-            rotateAnimation.setDuration(4000);
-            rotateAnimation.setRepeatCount(Animation.INFINITE);
-            animLoading.startAnimation(rotateAnimation);
-            animLoading.setVisibility(View.VISIBLE);
-        } else {
-            animLoading.clearAnimation();
-            animLoading.setVisibility(View.GONE);
-        }
     }
 
     /**
@@ -192,8 +177,6 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
             updateValues.put("taken",toLend);
             if(toLend)
                 updateValues.put("owner", username);
-            else
-                updateValues.put("owner", null);
             db.document("equipment/"+chosenItem.getId())
                     .update(updateValues)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
