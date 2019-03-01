@@ -7,7 +7,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -41,7 +40,7 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
     /**
      * Load new data to this array from the firestore cloud, and assigning a real time listener for changes.
      * @param dll Listener for real time changes in the list
-     * @param taken whether to take only taken items or only non taken items
+     * @param tk whether to take only taken items or only non taken items, or both
      * @param username filter data by username. if null is given, will not filter.
      */
     public void loadData(DataLoaderListener dll, TakenFilter tk, String username) {
@@ -59,7 +58,7 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
         }
         if(username != null)
             query = query.whereEqualTo("owner", username);
-        listenerRegistration = query.addSnapshotListener(this);
+        query.addSnapshotListener(this);
     }
 
     @Override
