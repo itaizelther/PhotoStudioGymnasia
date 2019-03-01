@@ -20,13 +20,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class TeachersActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class TeachersActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, EquipmentList.DataLoaderListener {
 
 
     private FloatingActionButton btnAddItem;
     private ListView lvTeachers;
     private SearchView searchTeachers;
-    private FirebaseFirestore db;
+    private EquipmentList equipmentList;
     private ArrayAdapter<StudioItem> listAdapater;
     private GraySquareLoadingView animLoading;
 
@@ -40,9 +40,11 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
         searchTeachers = findViewById(R.id.searchTeachers);
         animLoading = findViewById(R.id.animLoading);
 
+        equipmentList = EquipmentList.sharedInstance();
+
         animLoading.setAnimationOn(true);
 
-        listAdapater = new ArrayAdapter<StudioItem>(this, R.layout.listview_teachers, R.id.teacherListTitle, new ArrayList<StudioItem>()) {
+        listAdapater = new ArrayAdapter<StudioItem>(this, R.layout.listview_teachers, R.id.teacherListTitle, equipmentList) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
@@ -62,17 +64,7 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
 
         searchTeachers.setOnQueryTextListener(this);
 
-        db = FirebaseFirestore.getInstance();
-
-        db.collection("equipment").orderBy("type").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                animLoading.setAnimationOn(false);
-                for(DocumentSnapshot ds : queryDocumentSnapshots.getDocuments()) {
-                    listAdapater.add(ds.toObject(StudioItem.class).withId(ds.getId()));
-                }
-            }
-        });
+        equipmentList.loadData(this, EquipmentList.TakenFilter.BOTH, null);
     }
 
     public void filterButton(View v) {
@@ -89,5 +81,13 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
         else
             listAdapater.getFilter().filter(newText);
         return true;
+    }
+
+    @Override
+    public void dataLoadChange(boolean isOk) {
+        if(isOk) {
+            animLoading.setAnimationOn(false);
+            listAdapater.notifyDataSetChanged();
+        }
     }
 }

@@ -17,33 +17,18 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.annotation.Nullable;
-
 /**
  * The screen where the user can lend equipment or return them. The available items in each category will show up, updating it in real time.
  * @author Itai Zelther
  * @see MainActivity
  * @see BarcodeScanActivity
  */
-public class LendActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, DialogInterface.OnClickListener {
+public class LendActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, EquipmentList.DataLoaderListener, EquipmentList.DataUploadListener {
 
     private ListView lvLend; // the ListView instance
     private ArrayAdapter<StudioItem> adapterItems; // adapater for the list and ListView
     private GraySquareLoadingView animLoading; // the view used for animation
-    private StudioItem chosenItem; // the item the user currently chose
-    private FirebaseFirestore db; //instance to get data from cloud
+    private EquipmentList equipmentList; // The equipment list object where data is stored
     private boolean toLend; //the user wants to lend or return
     private String username; //user's name
     private TextView tvEmptyList; // TextView to notify if the list is empty
@@ -73,7 +58,9 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
         SearchView searchItems = findViewById(R.id.searchItems);
         lvLend = findViewById(R.id.lvLend);
 
-        adapterItems = new ArrayAdapter<StudioItem>(this,android.R.layout.activity_list_item,android.R.id.text1,new ArrayList<StudioItem>()) {
+        equipmentList = EquipmentList.sharedInstance();
+
+        adapterItems = new ArrayAdapter<StudioItem>(this,android.R.layout.activity_list_item,android.R.id.text1,equipmentList) {
 
           @Override
           public View getView(int position, View convertView, ViewGroup parent) {
@@ -98,61 +85,67 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
             }
         });
 
-        //get not taken list from the cloud
-        db = FirebaseFirestore.getInstance();
-        updateList();
+        animLoading.setAnimationOn(true);
+        lvLend.setVisibility(View.GONE);
+        if(toLend) {
+            equipmentList.loadData(this, EquipmentList.TakenFilter.ONLY_NON_TAKEN, null);
+        } else {
+            equipmentList.loadData(this, EquipmentList.TakenFilter.ONLY_TAKEN, username);
+        }
 
         searchItems.setOnQueryTextListener(this);
         searchItems.clearFocus();
     }
 
-
-    /**
-     * Sets animation for first loading, then assign listener to the database in FireBase
-     */
-    private void updateList() {
-        animLoading.setAnimationOn(true);
-        lvLend.setVisibility(View.GONE);
-
-        Query dbLink = db.collection("equipment").whereEqualTo("taken",!toLend);
-        if(!toLend)
-            dbLink = dbLink.whereEqualTo("owner",username);
-
-       dbLink.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w("LendList", "Listen failed");
-                    return;
-                }
-                adapterItems.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    adapterItems.add(doc.toObject(StudioItem.class).withId(doc.getId()));
-                }
-                animLoading.setAnimationOn(false);
-                if (adapterItems.isEmpty()) {
-                    tvEmptyList.setVisibility(View.VISIBLE);
-                    lvLend.setVisibility(View.GONE);
-                } else {
-                    adapterItems.notifyDataSetChanged();
-                    lvLend.setVisibility(View.VISIBLE);
-                    tvEmptyList.setVisibility(View.GONE);
-                }
+    @Override
+    public void dataLoadChange(boolean isOk) {
+        if(isOk) {
+            animLoading.setAnimationOn(false);
+            if(equipmentList.isEmpty()) {
+                tvEmptyList.setVisibility(View.VISIBLE);
+                lvLend.setVisibility(View.GONE);
+            } else {
+                adapterItems.notifyDataSetChanged();
+                lvLend.setVisibility(View.VISIBLE);
+                tvEmptyList.setVisibility(View.GONE);
             }
-        });
+        }
     }
+
+    @Override
+    public void dataUploadDidComplete(boolean isOk) {
+        if(isOk) {
+            if(toLend)
+                Toast.makeText(LendActivity.this,"השאלת את הפריט בהצלחה!",Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(LendActivity.this,"החזרת את הפריט בהצלחה!",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(LendActivity.this, "שגיאה בביצוע הפעולה - בדוק את חיבורך לאינטרנט.",Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     /**
      * Handles the lending item process: showing a dialog to confirm choosing. If chose to confirm, updates the FireBase database in OnClick method.
      * @param item the item that has been chosen
      */
-    private void chooseItem(StudioItem item) {
-        chosenItem = item;
+    private void chooseItem(final StudioItem item) {
+        DialogInterface.OnClickListener clickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which == DialogInterface.BUTTON_NEGATIVE)
+                    dialog.cancel();
+                else {
+                    equipmentList.uploadUpdatedData(LendActivity.this, item, toLend, username);
+                }
+            }
+        };
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setIcon(getResources().getIdentifier(item.getType(),"drawable",getPackageName()))
                 .setTitle("אישור")
-                .setPositiveButton("כן", this)
-                .setNegativeButton("לא", this);
+                .setPositiveButton("כן", clickListener)
+                .setNegativeButton("לא", clickListener);
         builder.setMessage( toLend ? "האם אתה רוצה להשאיל את "+item.toString() + "?" : "האם אתה רוצה להחזיר את "+item.toString() + "?");
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
@@ -165,37 +158,6 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
         else
             adapterItems.getFilter().filter(newText);
         return true;
-    }
-
-    //after dialog click
-    @Override
-    public void onClick(final DialogInterface dialog, int which) {
-        if(which == DialogInterface.BUTTON_NEGATIVE)
-            dialog.cancel();
-        else {
-            HashMap<String, Object> updateValues = new HashMap<>();
-            updateValues.put("taken",toLend);
-            if(toLend)
-                updateValues.put("owner", username);
-            db.document("equipment/"+chosenItem.getId())
-                    .update(updateValues)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    if(toLend)
-                        Toast.makeText(LendActivity.this,"השאלת את הפריט בהצלחה!",Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(LendActivity.this,"החזרת את הפריט בהצלחה!",Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(LendActivity.this, "שגיאה בביצוע הפעולה - בדוק את חיבורך לאינטרנט.",Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
-            });
-        }
     }
 
     /**
@@ -217,7 +179,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
                 alertDialog.show();
             } else if(resultCode == RESULT_OK) {
                 String itemID = data.getStringExtra("barcodeValue");
-                StudioItem item = getItemWithIDFromList(itemID);
+                StudioItem item = equipmentList.searchForID(itemID);
                 if(item != null) {
                     chooseItem(item);
                 } else {
@@ -227,20 +189,6 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
                 }
             }
         }
-    }
-
-    /**
-     * Gets id of item, checks if it is in the available items list, and returns the desired item.
-     * @param id Item's id
-     * @return The item with the id given, or null if it does not exist in the list.
-     */
-    private StudioItem getItemWithIDFromList(String id) {
-        for(int i=0; i<adapterItems.getCount(); i++) {
-            if(adapterItems.getItem(i).getId().equals(id)) {
-                return adapterItems.getItem(i);
-            }
-        }
-        return null;
     }
 
     //part of query text interface I must implement
