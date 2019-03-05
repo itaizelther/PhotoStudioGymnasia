@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".TeachersActivity"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:layoutDirection="rtl">
 
     <TextView
         android:layout_width="wrap_content"
@@ -18,22 +19,23 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="מסנן"
-            android:onClick="filterButton"/>
+        android:layout_height="wrap_content"
+        android:weightSum="4">
 
         <SearchView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:iconifiedByDefault="false"
             android:queryHint="חיפוש"
-            android:id="@+id/searchTeachers">
+            android:id="@+id/searchTeachers"
+            android:layout_weight="3"/>
 
-        </SearchView>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="מסנן"
+            android:onClick="filterButton"
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
@@ -44,7 +46,8 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/lvTeachers"/>
+            android:id="@+id/lvTeachers"
+            android:layoutDirection="ltr"/>
 
         <il.appclass.zelther.photostudiogymnasia.GraySquareLoadingView
             android:layout_width="50dp"
@@ -55,7 +58,7 @@
         <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
+            android:layout_gravity="start|bottom"
             android:layout_margin="@dimen/fab_margin"
             android:src="@android:drawable/ic_input_add"
             android:id="@+id/btnAddItem"/>

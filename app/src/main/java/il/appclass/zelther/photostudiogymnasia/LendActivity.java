@@ -3,10 +3,8 @@ package il.appclass.zelther.photostudiogymnasia;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -26,7 +24,7 @@ import android.widget.Toast;
 public class LendActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, EquipmentList.DataLoaderListener, EquipmentList.DataUploadListener {
 
     private ListView lvLend; // the ListView instance
-    private ArrayAdapter<StudioItem> adapterItems; // adapater for the list and ListView
+    private ArrayAdapter<StudioItem> adapterItems; // adapter for the list and ListView
     private GraySquareLoadingView animLoading; // the view used for animation
     private EquipmentList equipmentList; // The equipment list object where data is stored
     private boolean toLend; //the user wants to lend or return
@@ -77,7 +75,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
         };
         lvLend.setAdapter(adapterItems);
 
-        //when item is choosen from the manual list
+        //when item is chosen from the manual list
         lvLend.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

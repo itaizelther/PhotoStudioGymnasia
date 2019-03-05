@@ -1,24 +1,16 @@
 package il.appclass.zelther.photostudiogymnasia;
 
+import android.app.Dialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
-
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
 
 public class TeachersActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, EquipmentList.DataLoaderListener {
 
@@ -27,7 +19,7 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
     private ListView lvTeachers;
     private SearchView searchTeachers;
     private EquipmentList equipmentList;
-    private ArrayAdapter<StudioItem> listAdapater;
+    private ArrayAdapter<StudioItem> listAdapter;
     private GraySquareLoadingView animLoading;
 
     @Override
@@ -44,12 +36,12 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
 
         animLoading.setAnimationOn(true);
 
-        listAdapater = new ArrayAdapter<StudioItem>(this, R.layout.listview_teachers, R.id.teacherListTitle, equipmentList) {
+        listAdapter = new ArrayAdapter<StudioItem>(this, R.layout.listview_teachers, R.id.teacherListTitle, equipmentList) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
 
-                StudioItem studioItem = listAdapater.getItem(position);
+                StudioItem studioItem = listAdapter.getItem(position);
                 TextView textTitle = view.findViewById(R.id.teacherListTitle);
                 TextView textSubtitle = view.findViewById(R.id.teacherListSubtitle);
                 ImageView icon = view.findViewById(R.id.teacherListIcon);
@@ -60,7 +52,7 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
                 return view;
             }
         };
-        lvTeachers.setAdapter(listAdapater);
+        lvTeachers.setAdapter(listAdapter);
 
         searchTeachers.setOnQueryTextListener(this);
 
@@ -68,7 +60,10 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
     }
 
     public void filterButton(View v) {
-        //TODO make filter dialog
+        Dialog filterDialog = new Dialog(this);
+        filterDialog.setContentView(R.layout.teacher_filter_dialog);
+        filterDialog.show();
+        //TODO make the dialog work
     }
 
     @Override
@@ -77,9 +72,9 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
     @Override
     public boolean onQueryTextChange(String newText) {
         if(newText.isEmpty())
-            listAdapater.getFilter().filter(null);
+            listAdapter.getFilter().filter(null);
         else
-            listAdapater.getFilter().filter(newText);
+            listAdapter.getFilter().filter(newText);
         return true;
     }
 
@@ -87,7 +82,7 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
     public void dataLoadChange(boolean isOk) {
         if(isOk) {
             animLoading.setAnimationOn(false);
-            listAdapater.notifyDataSetChanged();
+            listAdapter.notifyDataSetChanged();
         }
     }
 }

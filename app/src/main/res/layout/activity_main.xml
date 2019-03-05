@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity"
-    android:paddingTop="50dp">
+    android:paddingTop="50dp"
+    android:layoutDirection="rtl">
 
     <!-- logo -->
     <ImageView
@@ -61,7 +62,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ניהול מאגר נתונים"
+            android:text="ניהול רשימת ציוד"
             android:fontFamily="@font/assistant_font"
             android:textSize="20dp"
             android:textColor="#6B117A"

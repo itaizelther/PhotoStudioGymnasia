@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -84,6 +85,7 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
     public void uploadUpdatedData(final DataUploadListener dul, StudioItem studioItem, boolean taken, String username) {
         HashMap<String, Object> updateValues = new HashMap<>();
         updateValues.put("taken",taken);
+        updateValues.put("lastUsed", FieldValue.serverTimestamp());
         if(username != null)
             updateValues.put("owner", username);
         db.collection("equipment").document(studioItem.getId()).update(updateValues).addOnCompleteListener(new OnCompleteListener<Void>() {

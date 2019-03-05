@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LendActivity">
+    tools:context=".LendActivity"
+    android:layoutDirection="rtl">
 
 
     <TextView
@@ -24,6 +25,14 @@
         android:padding="10dp">
 
 
+        <TextView
+            android:id="@+id/tvLendSubTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="בחר פריט מהרשימה או"
+            android:textSize="20sp"
+            app:fontFamily="@font/assistant_font" />
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,14 +41,6 @@
             android:fontFamily="@font/assistant_font"
             android:textSize="20sp"
             android:onClick="onBarcodeRequest"/>
-
-        <TextView
-            android:id="@+id/tvLendSubTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="בחר פריט מהרשימה או"
-            android:textSize="20sp"
-            app:fontFamily="@font/assistant_font" />
 
 
     </LinearLayout>
@@ -61,7 +62,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/lvLend"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:layoutDirection="ltr">
 
         </ListView>
 
