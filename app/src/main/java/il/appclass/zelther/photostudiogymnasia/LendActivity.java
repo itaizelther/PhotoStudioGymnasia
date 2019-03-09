@@ -86,9 +86,9 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
         animLoading.setAnimationOn(true);
         lvLend.setVisibility(View.GONE);
         if(toLend) {
-            equipmentList.loadData(this, EquipmentList.TakenFilter.ONLY_NON_TAKEN, null);
+            equipmentList.loadData(this, EquipmentList.TakenFilter.ONLY_NON_TAKEN, null, null);
         } else {
-            equipmentList.loadData(this, EquipmentList.TakenFilter.ONLY_TAKEN, username);
+            equipmentList.loadData(this, EquipmentList.TakenFilter.ONLY_TAKEN, null, username);
         }
 
         searchItems.setOnQueryTextListener(this);

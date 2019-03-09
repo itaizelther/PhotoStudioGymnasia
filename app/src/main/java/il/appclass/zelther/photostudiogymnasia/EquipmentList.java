@@ -42,11 +42,16 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
      * Load new data to this array from the firestore cloud, and assigning a real time listener for changes.
      * @param dll Listener for real time changes in the list
      * @param tk whether to take only taken items or only non taken items, or both
+     * @param orderBy name of field to order the list by
      * @param username filter data by username. if null is given, will not filter.
      */
-    public void loadData(DataLoaderListener dll, TakenFilter tk, String username) {
+    public void loadData(DataLoaderListener dll, TakenFilter tk, String orderBy, String username) {
         dataLoaderListener = dll;
         Query query = db.collection("equipment");
+
+        if(orderBy != null)
+            query = query.orderBy(orderBy);
+
         switch (tk) {
             case ONLY_TAKEN:
                 query = query.whereEqualTo("taken", true);

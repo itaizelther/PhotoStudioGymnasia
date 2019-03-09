@@ -20,15 +20,11 @@
         android:layout_gravity="start">
 
         <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="הצג חפצים לא מושאלים"
-            android:fontFamily="@font/assistant_font"
-            android:textSize="15sp"/>
+            android:id="@+id/chShowNonTaken"/>
 
     </LinearLayout>
 
@@ -44,34 +40,39 @@
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start">
+        android:layout_gravity="start"
+        android:id="@+id/rgOrderTeacher">
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="חפץ"
             android:fontFamily="@font/assistant_font"
-            android:layoutDirection="rtl"/>
+            android:layoutDirection="rtl"
+            android:id="@+id/rbOrderName"/>
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="תאריך"
-            android:fontFamily="@font/assistant_font"/>
+            android:fontFamily="@font/assistant_font"
+            android:id="@+id/rbOrderLastUsed"/>
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="משאיל"
-            android:fontFamily="@font/assistant_font"/>
+            android:fontFamily="@font/assistant_font"
+            android:id="@+id/rbOrderOwner"/>
 
     </RadioGroup>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="סגור"
+        android:text="אישור"
         android:fontFamily="@font/assistant_font"
-        android:layout_gravity="end"/>
+        android:layout_gravity="end"
+        android:id="@+id/btnConfirmFilter" />
 
 </LinearLayout>
