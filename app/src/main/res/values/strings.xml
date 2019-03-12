@@ -2,5 +2,13 @@
     <string name="app_name">PhotoStudioGymnasia</string>
     <string name="password">studioGZ2019</string>
     <string name="teacher_password">galhaimdanny</string>
-    <string name="title_activity_teachers">TeachersActivity</string>
+    
+    <string-array name="category_list">
+        <item>מצלמות</item>
+        <item>עדשות</item>
+        <item>סלייב</item>
+        <item>פלאשים</item>
+        <item>חצובות</item>
+        <item>בטריות</item>
+    </string-array>
 </resources>

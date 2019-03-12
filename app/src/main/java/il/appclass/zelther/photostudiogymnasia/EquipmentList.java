@@ -102,6 +102,29 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
     }
 
     /**
+     * Adding a new item to the list and the cloud.
+     * @param dul The listener which will be called on completion.
+     * @param studioItem The item object which will be uploaded to the cloud.
+     */
+    public void uploadNewItem(final DataUploadListener dul, StudioItem studioItem) {
+        db.collection("equipment").document(studioItem.getId()).set(studioItem).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                dul.dataUploadDidComplete(task.isSuccessful());
+            }
+        });
+    }
+
+    public void deleteItem(final DataDeleteListener ddl, StudioItem studioItem) {
+        db.collection("equipment").document(studioItem.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                ddl.dataDeleteDidComplete(task.isSuccessful());
+            }
+        });
+    }
+
+    /**
      * Gets id of item, checks if it is in the available items list, and returns the desired item.
      * @param id Item's id
      * @return The item with the id given, or null if it does not exist in the list.
@@ -120,6 +143,7 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
      * @author Itai Zelther
      * @see EquipmentList
      * @see DataUploadListener
+     * @see DataDeleteListener
      */
     public interface DataLoaderListener {
         /**
@@ -134,6 +158,7 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
      * @author Itai Zelther
      * @see EquipmentList
      * @see DataLoaderListener
+     * @see DataDeleteListener
      */
     public interface DataUploadListener {
         /**
@@ -141,6 +166,21 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
          * @param isOk whether the update has been successful or not.
          */
         void dataUploadDidComplete(boolean isOk);
+    }
+
+    /**
+     * Listener for data deleting. called one time, when a class is pending a delete request, this listener will be called the the deletion is complete.
+     * @author Itai Zelther
+     * @see EquipmentList
+     * @see DataLoaderListener
+     * @see DataUploadListener
+     */
+    public interface DataDeleteListener {
+        /**
+         * Called when a class asked to delete an item for the list, and the process on the cloud is done.
+         * @param isOk whether the deletion has been successful or not.
+         */
+        void dataDeleteDidComplete(boolean isOk);
     }
 
     public enum TakenFilter {

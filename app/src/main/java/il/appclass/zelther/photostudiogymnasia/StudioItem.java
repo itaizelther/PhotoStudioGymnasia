@@ -18,6 +18,14 @@ public class StudioItem {
 
     public StudioItem() {}
 
+    public StudioItem(String name, String type, String id) {
+        this.name = name;
+        this.type = type;
+        this.id = id;
+        owner = null;
+        taken = false;
+    }
+
     @Override
     public String toString() {
         return name + " (" + id + ")";

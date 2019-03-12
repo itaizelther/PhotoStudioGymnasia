@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="rtl"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/assistant_font"
+        android:text="חפץ חדש"
+        android:textSize="30dp"
+        android:layout_marginBottom="10dp"/>
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <TableRow>
+
+            <TextView
+                android:fontFamily="@font/assistant_font"
+                android:text="קטגוריה:"
+                android:textSize="20dp" />
+
+            <Spinner android:layout_width="120dp"
+                android:id="@+id/spnAddCategory"
+                android:entries="@array/category_list"/>
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:fontFamily="@font/assistant_font"
+                android:text="שם חפץ:"
+                android:textSize="20dp" />
+
+            <EditText android:id="@+id/etAddItemName" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:fontFamily="@font/assistant_font"
+                android:text="מזהה חפץ (ID):"
+                android:textSize="20dp"
+                android:layout_marginEnd="20dp"/>
+
+            <EditText android:id="@+id/etAddItemID" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="הוסף"
+            android:id="@+id/btnAddConfirm"
+            android:textColor="#08AA08"
+            android:layout_marginEnd="20dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="בטל"
+            android:id="@+id/btnAddCancel"
+            android:textColor="#CA1212"/>
+
+    </LinearLayout>
+
+</LinearLayout>

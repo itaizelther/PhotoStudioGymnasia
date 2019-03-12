@@ -1,8 +1,9 @@
 package il.appclass.zelther.photostudiogymnasia;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,13 +11,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class TeachersActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, EquipmentList.DataLoaderListener {
+public class TeachersActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, EquipmentList.DataLoaderListener, EquipmentList.DataUploadListener, View.OnClickListener, EquipmentList.DataDeleteListener {
 
 
     private ListView lvTeachers;
@@ -48,10 +53,13 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
                 TextView textTitle = view.findViewById(R.id.teacherListTitle);
                 TextView textSubtitle = view.findViewById(R.id.teacherListSubtitle);
                 ImageView icon = view.findViewById(R.id.teacherListIcon);
+                ImageButton btnDelete = view.findViewById(R.id.btnDelete);
 
                 textTitle.setText(studioItem.toString());
                 textSubtitle.setText(studioItem.getTeachersData());
                 icon.setImageResource(getResources().getIdentifier(studioItem.getType(),"drawable",getPackageName()));
+                btnDelete.setTag(studioItem);
+                btnDelete.setOnClickListener(TeachersActivity.this);
                 return view;
             }
         };
@@ -61,7 +69,7 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
 
         sp = getSharedPreferences("teacher_filter",MODE_PRIVATE);
 
-        updateList(sp.getBoolean("showNonTaken",true), orderRadioButtonIdToString(sp.getInt("orderBy",R.id.rbOrderName)));
+        updateList(sp.getBoolean("showNonTaken",true), orderRadioButtonIdToString(sp.getInt("orderBy",R.id.rbOrderType)));
     }
 
     /**
@@ -77,7 +85,7 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
         final Button btnConfirmFilter = filterDialog.findViewById(R.id.btnConfirmFilter);
 
         chShowNonTaken.setChecked(sp.getBoolean("showNonTaken",true));
-        rgOrderTeacher.check(sp.getInt("orderBy",R.id.rbOrderName));
+        rgOrderTeacher.check(sp.getInt("orderBy",R.id.rbOrderType));
 
         btnConfirmFilter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,8 +107,48 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
      * @param v The add button.
      */
     public void addButton(View v) {
+        final Dialog addDialog = new Dialog(this);
+        addDialog.setContentView(R.layout.teacher_add_dialog);
 
-        //TODO add activity?
+        final Spinner categoryAddSpinner = addDialog.findViewById(R.id.spnAddCategory);
+        Button btnAddConfirm = addDialog.findViewById(R.id.btnAddConfirm);
+        Button btnAddDelete = addDialog.findViewById(R.id.btnAddCancel);
+        final EditText etAddItemName = addDialog.findViewById(R.id.etAddItemName);
+        final EditText etAddItemID = addDialog.findViewById(R.id.etAddItemID);
+
+        btnAddConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String itemName = etAddItemName.getText().toString();
+                String itemId = etAddItemID.getText().toString();
+                String itemCategory;
+
+                switch (categoryAddSpinner.getSelectedItem().toString()) {
+                    case "מצלמות": itemCategory = "camera"; break;
+                    case "עדשות": itemCategory = "lenses"; break;
+                    case "סלייב": itemCategory = "slave"; break;
+                    case "פלאשים": itemCategory = "speedlight"; break;
+                    case "חצובות": itemCategory = "tripod"; break;
+                    case "בטריות": itemCategory = "battery"; break;
+                    default: itemCategory = null;
+                }
+
+                if(!(itemName.trim().isEmpty() || itemId.trim().isEmpty())) {
+                    StudioItem si = new StudioItem(itemName, itemCategory, itemId);
+                    equipmentList.uploadNewItem(TeachersActivity.this, si);
+                    addDialog.dismiss();
+                }
+            }
+        });
+
+        btnAddDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addDialog.cancel();
+            }
+        });
+
+        addDialog.show();
     }
 
     /**
@@ -126,7 +174,7 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
         switch (rbId) {
             case R.id.rbOrderLastUsed: return "lastUsed";
             case R.id.rbOrderOwner: return "owner";
-            default: return "name";
+            default: return "type";
         }
     }
 
@@ -147,6 +195,52 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
         if(isOk) {
             animLoading.setAnimationOn(false);
             listAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(this, "משהו השתבש - ודא שהנך מחובר למרשתת", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void dataUploadDidComplete(boolean isOk) {
+        if(isOk) {
+            Toast.makeText(this, "פריט נוסף בהצלחה!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "כשל בהוספת הפריט - ודא שאתה מחובר לאינטרנט.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //On delete button clicked
+    @Override
+    public void onClick(View v) {
+        final StudioItem studioItem = (StudioItem) v.getTag();
+
+        DialogInterface.OnClickListener clickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which == DialogInterface.BUTTON_POSITIVE) {
+                    equipmentList.deleteItem(TeachersActivity.this, studioItem);
+                } else {
+                    dialog.cancel();
+                }
+            }
+        };
+
+        AlertDialog deleteConfirmDialog = new AlertDialog.Builder(this)
+                .setTitle("מחיקה")
+                .setMessage("האם אתה בטוח שאתה רוצה למחוק את הפריט "+studioItem.toString()+"?")
+                .setIcon(getResources().getIdentifier(studioItem.getType(),"drawable",getPackageName()))
+                .setPositiveButton("כן",clickListener)
+                .setNegativeButton("לא", clickListener)
+                .create();
+        deleteConfirmDialog.show();
+    }
+
+    @Override
+    public void dataDeleteDidComplete(boolean isOk) {
+        if(isOk) {
+            Toast.makeText(this, "פריט נמחק בהצלחה.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "שגיאה במחיקת פריט. נסה שוב.", Toast.LENGTH_SHORT).show();
         }
     }
 }
