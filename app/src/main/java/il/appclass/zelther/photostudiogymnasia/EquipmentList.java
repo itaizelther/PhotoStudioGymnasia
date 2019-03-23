@@ -8,6 +8,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -22,6 +23,7 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
     private static EquipmentList equipmentList;
     private DataLoaderListener dataLoaderListener;
     private FirebaseFirestore db;
+    private ListenerRegistration listenerRegistration;
 
     private EquipmentList() {
         db = FirebaseFirestore.getInstance();
@@ -46,6 +48,9 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
      * @param username filter data by username. if null is given, will not filter.
      */
     public void loadData(DataLoaderListener dll, TakenFilter tk, String orderBy, String username) {
+        if(listenerRegistration != null)
+            listenerRegistration.remove();
+
         dataLoaderListener = dll;
         Query query = db.collection("equipment");
 
@@ -64,7 +69,7 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
         }
         if(username != null)
             query = query.whereEqualTo("owner", username);
-        query.addSnapshotListener(this);
+        listenerRegistration = query.addSnapshotListener(this);
     }
 
     @Override
@@ -87,7 +92,7 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
      * @param taken Value which will be assigned in cloud.
      * @param username Value which will be assigned in cloud.
      */
-    public void uploadUpdatedData(final DataUploadListener dul, StudioItem studioItem, boolean taken, String username) {
+    public void uploadUpdatedData(final DataUploadListener dul, final StudioItem studioItem, boolean taken, String username) {
         HashMap<String, Object> updateValues = new HashMap<>();
         updateValues.put("taken",taken);
         updateValues.put("lastUsed", FieldValue.serverTimestamp());
@@ -96,7 +101,7 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
         db.collection("equipment").document(studioItem.getId()).update(updateValues).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                dul.dataUploadDidComplete(task.isSuccessful());
+                dul.dataUploadDidComplete(task.isSuccessful(), studioItem);
             }
         });
     }
@@ -106,11 +111,11 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
      * @param dul The listener which will be called on completion.
      * @param studioItem The item object which will be uploaded to the cloud.
      */
-    public void uploadNewItem(final DataUploadListener dul, StudioItem studioItem) {
+    public void uploadNewItem(final DataUploadListener dul, final StudioItem studioItem) {
         db.collection("equipment").document(studioItem.getId()).set(studioItem).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                dul.dataUploadDidComplete(task.isSuccessful());
+                dul.dataUploadDidComplete(task.isSuccessful(), studioItem);
             }
         });
     }
@@ -164,8 +169,9 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
         /**
          * Called when an update has been pending and now it is completed.
          * @param isOk whether the update has been successful or not.
+         * @param item The item which has been uploaded or updated in the cloud.
          */
-        void dataUploadDidComplete(boolean isOk);
+        void dataUploadDidComplete(boolean isOk, StudioItem item);
     }
 
     /**

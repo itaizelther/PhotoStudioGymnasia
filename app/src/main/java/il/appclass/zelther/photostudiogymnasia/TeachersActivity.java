@@ -201,7 +201,7 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
     }
 
     @Override
-    public void dataUploadDidComplete(boolean isOk) {
+    public void dataUploadDidComplete(boolean isOk, StudioItem item) {
         if(isOk) {
             Toast.makeText(this, "פריט נוסף בהצלחה!", Toast.LENGTH_SHORT).show();
         } else {

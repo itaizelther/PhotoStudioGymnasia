@@ -1,10 +1,19 @@
 package il.appclass.zelther.photostudiogymnasia;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -31,6 +40,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
     private String username; //user's name
     private TextView tvEmptyList; // TextView to notify if the list is empty
     private final int REQUEST_BARCODE_CODE = 3;
+    public static final String CHANNEL_ID = "channelRetrieve";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,12 +121,14 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     @Override
-    public void dataUploadDidComplete(boolean isOk) {
+    public void dataUploadDidComplete(boolean isOk, StudioItem item) {
         if(isOk) {
-            if(toLend)
+            if(toLend) {
                 Toast.makeText(LendActivity.this,"השאלת את הפריט בהצלחה!",Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(LendActivity.this,"החזרת את הפריט בהצלחה!",Toast.LENGTH_SHORT).show();
+                scheduleNotification(item);
+            } else {
+                Toast.makeText(LendActivity.this, "החזרת את הפריט בהצלחה!", Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(LendActivity.this, "שגיאה בביצוע הפעולה - בדוק את חיבורך לאינטרנט.",Toast.LENGTH_SHORT).show();
         }
@@ -187,6 +199,25 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
                 }
             }
         }
+    }
+
+    public void scheduleNotification(StudioItem item) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
+        String message = "עבר שבוע מאז שהשאלת את "+item.toString()+". נא זכור להחזיר אותו לסטודיו!";
+        builder.setContentTitle("תזכורת להשאלת פריט").setSmallIcon(R.drawable.camera).setStyle(new NotificationCompat.BigTextStyle().bigText(message));
+        Notification notification = builder.build();
+        delayNotification(notification, 10000);
+    }
+
+    private void delayNotification(Notification notification, int delay) {
+        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, 0);
+        long futureInMillis = System.currentTimeMillis() + delay;
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
     }
 
     //part of query text interface I must implement
