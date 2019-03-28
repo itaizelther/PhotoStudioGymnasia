@@ -1,6 +1,7 @@
 package il.appclass.zelther.photostudiogymnasia;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -169,7 +170,7 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
         /**
          * Called when an update has been pending and now it is completed.
          * @param isOk whether the update has been successful or not.
-         * @param item The item which has been uploaded or updated in the cloud.
+         * @param item The item which has been uploaded or updated in the cloud. The item have the same settings as given, and not the new ones.
          */
         void dataUploadDidComplete(boolean isOk, StudioItem item);
     }

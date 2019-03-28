@@ -8,12 +8,14 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -41,6 +43,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
     private TextView tvEmptyList; // TextView to notify if the list is empty
     private final int REQUEST_BARCODE_CODE = 3;
     public static final String CHANNEL_ID = "channelRetrieve";
+    public static final String NOTIFICATION_GROUP_REMINDER_ID = "il.appclass.zelther.ITEMS_REMINDER";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,9 +128,10 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
         if(isOk) {
             if(toLend) {
                 Toast.makeText(LendActivity.this,"השאלת את הפריט בהצלחה!",Toast.LENGTH_SHORT).show();
-                scheduleNotification(item);
+                scheduleNotification(item, false);
             } else {
                 Toast.makeText(LendActivity.this, "החזרת את הפריט בהצלחה!", Toast.LENGTH_SHORT).show();
+                scheduleNotification(item, true);
             }
         } else {
             Toast.makeText(LendActivity.this, "שגיאה בביצוע הפעולה - בדוק את חיבורך לאינטרנט.",Toast.LENGTH_SHORT).show();
@@ -201,23 +205,29 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
-    public void scheduleNotification(StudioItem item) {
+    public void scheduleNotification(StudioItem item, boolean cancel) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
         String message = "עבר שבוע מאז שהשאלת את "+item.toString()+". נא זכור להחזיר אותו לסטודיו!";
-        builder.setContentTitle("תזכורת להשאלת פריט").setSmallIcon(R.drawable.camera).setStyle(new NotificationCompat.BigTextStyle().bigText(message));
+        builder.setContentTitle("תזכורת להשאלת פריט").setSmallIcon(R.drawable.app_logo).setStyle(new NotificationCompat.BigTextStyle().bigText(message)).setGroup(NOTIFICATION_GROUP_REMINDER_ID);
         Notification notification = builder.build();
-        delayNotification(notification, 10000);
+        delayNotification(notification, 15000, item.getId().hashCode(), cancel);
     }
 
-    private void delayNotification(Notification notification, int delay) {
+    private void delayNotification(Notification notification, int delay, int requestCode, boolean cancel) {
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, requestCode);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, 0);
-        long futureInMillis = System.currentTimeMillis() + delay;
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, notificationIntent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
+
+        if(cancel) {
+            alarmManager.cancel(pendingIntent);
+            pendingIntent.cancel();
+        } else {
+            long futureInMillis = System.currentTimeMillis() + delay;
+            alarmManager.set(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
+        }
     }
 
     //part of query text interface I must implement
