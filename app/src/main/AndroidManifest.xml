@@ -14,7 +14,8 @@
         <receiver
             android:name=".NotificationPublisher"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true"
+            android:permission="" />
 
         <activity android:name=".TeachersActivity" />
         <activity android:name=".BarcodeScanActivity" />

@@ -10,7 +10,7 @@
         android:id="@+id/filterDialogTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="מסנן חפצים"
+        android:text="@string/equipmentFilter"
         android:textSize="30sp"
         android:fontFamily="@font/assistant_font"/>
 
@@ -23,7 +23,7 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="הצג חפצים לא מושאלים"
+            android:text="@string/showNonTakenItems"
             android:id="@+id/chShowNonTaken"/>
 
     </LinearLayout>
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:textSize="20sp"
-        android:text="סדר לפי:"
+        android:text="@string/orderByLabel"
         android:fontFamily="@font/assistant_font"
         android:layout_marginTop="10dp"/>
 
@@ -46,7 +46,7 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="חפץ"
+            android:text="@string/item"
             android:fontFamily="@font/assistant_font"
             android:layoutDirection="rtl"
             android:id="@+id/rbOrderType"/>
@@ -54,14 +54,14 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="תאריך"
+            android:text="@string/date"
             android:fontFamily="@font/assistant_font"
             android:id="@+id/rbOrderLastUsed"/>
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="משאיל"
+            android:text="@string/lender"
             android:fontFamily="@font/assistant_font"
             android:id="@+id/rbOrderOwner"/>
 
@@ -70,7 +70,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="אישור"
+        android:text="@string/confirm"
         android:fontFamily="@font/assistant_font"
         android:layout_gravity="end"
         android:id="@+id/btnConfirmFilter" />

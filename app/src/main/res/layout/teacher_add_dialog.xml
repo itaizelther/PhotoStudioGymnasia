@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:fontFamily="@font/assistant_font"
-        android:text="חפץ חדש"
-        android:textSize="30dp"
+        android:text="@string/newItem"
+        android:textSize="30sp"
         android:layout_marginBottom="10dp"/>
 
     <TableLayout
@@ -24,8 +24,8 @@
 
             <TextView
                 android:fontFamily="@font/assistant_font"
-                android:text="קטגוריה:"
-                android:textSize="20dp" />
+                android:text="@string/category"
+                android:textSize="20sp" />
 
             <Spinner android:layout_width="120dp"
                 android:id="@+id/spnAddCategory"
@@ -37,10 +37,13 @@
 
             <TextView
                 android:fontFamily="@font/assistant_font"
-                android:text="שם חפץ:"
-                android:textSize="20dp" />
+                android:text="@string/itemNameLabel"
+                android:textSize="20sp"
+                android:labelFor="@id/etAddItemName"/>
 
-            <EditText android:id="@+id/etAddItemName" />
+            <EditText android:id="@+id/etAddItemName"
+                android:fontFamily="@font/assistant_font"
+                android:inputType="text"/>
 
         </TableRow>
 
@@ -48,11 +51,14 @@
 
             <TextView
                 android:fontFamily="@font/assistant_font"
-                android:text="מזהה חפץ (ID):"
-                android:textSize="20dp"
-                android:layout_marginEnd="20dp"/>
+                android:text="@string/itemIDLabel"
+                android:textSize="20sp"
+                android:layout_marginEnd="20dp"
+                android:labelFor="@id/etAddItemID"/>
 
-            <EditText android:id="@+id/etAddItemID" />
+            <EditText android:id="@+id/etAddItemID"
+                android:fontFamily="@font/assistant_font"
+                android:inputType="text"/>
 
         </TableRow>
 
@@ -67,7 +73,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="הוסף"
+            android:text="@string/add"
             android:id="@+id/btnAddConfirm"
             android:textColor="#08AA08"
             android:layout_marginEnd="20dp"/>
@@ -75,7 +81,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="בטל"
+            android:text="@string/cancel"
             android:id="@+id/btnAddCancel"
             android:textColor="#CA1212"/>
 

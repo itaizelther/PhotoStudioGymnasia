@@ -2,13 +2,8 @@ package il.appclass.zelther.photostudiogymnasia;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,9 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-
-import com.google.firebase.FirebaseApp;
 
 /**
  * The main screen where you can login as teacher, view credits and choose whether to lend or return equipment to the studio.
@@ -104,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                         EditText etPasswordTeacher = teacherLoginDialog.findViewById(R.id.etPasswordTeacher);
                         if(etPasswordTeacher.getText().toString().equals(getResources().getString(R.string.teacher_password))) {
                             teacherLoginDialog.dismiss();
-                            sp.edit().putBoolean("isTeacher",true).commit();
+                            sp.edit().putBoolean("isTeacher",true).apply();
                             updateTeacherLayout();
                         }
                     }

@@ -2,20 +2,14 @@ package il.appclass.zelther.photostudiogymnasia;
 
 import android.app.AlarmManager;
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -42,8 +36,9 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
     private String username; //user's name
     private TextView tvEmptyList; // TextView to notify if the list is empty
     private final int REQUEST_BARCODE_CODE = 3;
+    private static final String NOTIFICATION_GROUP_REMINDER_ID = "il.appclass.zelther.ITEMS_REMINDER";
+
     public static final String CHANNEL_ID = "channelRetrieve";
-    public static final String NOTIFICATION_GROUP_REMINDER_ID = "il.appclass.zelther.ITEMS_REMINDER";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +76,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
               TextView text = view.findViewById(android.R.id.text1);
               ImageView icon = view.findViewById(android.R.id.icon);
 
+              assert studioItem != null;
               text.setText(studioItem.toString());
               icon.setImageResource(getResources().getIdentifier(studioItem.getType(),"drawable",getPackageName()));
               return view;
@@ -205,10 +201,10 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
-    public void scheduleNotification(StudioItem item, boolean cancel) {
+    private void scheduleNotification(StudioItem item, boolean cancel) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
         String message = "עבר שבוע מאז שהשאלת את "+item.toString()+". נא זכור להחזיר אותו לסטודיו!";
-        builder.setContentTitle("תזכורת להשאלת פריט").setSmallIcon(R.drawable.app_logo).setStyle(new NotificationCompat.BigTextStyle().bigText(message)).setGroup(NOTIFICATION_GROUP_REMINDER_ID);
+        builder.setContentTitle("תזכורת להשאלת פריט").setSmallIcon(R.drawable.app_notification_logo).setStyle(new NotificationCompat.BigTextStyle().bigText(message)).setGroup(NOTIFICATION_GROUP_REMINDER_ID);
         Notification notification = builder.build();
         delayNotification(notification, 15000, item.getId().hashCode(), cancel);
     }

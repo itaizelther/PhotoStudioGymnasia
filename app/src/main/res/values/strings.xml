@@ -1,8 +1,10 @@
 <resources>
+    <!-- passwords and app name -->
     <string name="app_name">PhotoStudioGymnasia</string>
     <string name="password">studioGZ2019</string>
     <string name="teacher_password">galhaimdanny</string>
-    
+
+    <!-- new item spinner-->
     <string-array name="category_list">
         <item>מצלמות</item>
         <item>עדשות</item>
@@ -11,4 +13,37 @@
         <item>חצובות</item>
         <item>בטריות</item>
     </string-array>
+
+    <!-- TextViews and buttons -->
+    <string name="chooseItemTitle">בחר/י פריט מהרשימה או</string>
+    <string name="scanCode">סרוק קוד</string>
+    <string name="noAvailableItems">אין חפצים זמינים ברשימה זאת.</string>
+    <string name="loginTitle">ברוכים הבאים לאפליקצית הסטודיו לצילום של הגימנסיה העברית הרצליה! נא הכנס את שמך המלא וסיסמת האפליקציה בשדות המתאימים.</string>
+    <string name="fullNameLabel">שם מלא:</string>
+    <string name="passwordLabel">סיסמה:</string>
+    <string name="login">כניסה</string>
+    <string name="appTitle">אפליקצית הציוד של מגמת צילום</string>
+    <string name="herzliyaHebrewGymnasium">הגימנסיה העברית הרצליה</string>
+    <string name="lendEquipment">שאילת ציוד</string>
+    <string name="returnEquipment">החזרת ציוד</string>
+    <string name="manageEquipmentList">ניהול רשימת ציוד</string>
+    <string name="studioEquipment">ציוד הסטודיו</string>
+    <string name="filter">מסנן</string>
+    <string name="delete">מחק</string>
+    <string name="about">אודות</string>
+    <string name="teacherLogin">כניסה למורים</string>
+    <string name="newItem">חפץ חדש</string>
+    <string name="category">קטגוריה</string>
+    <string name="itemNameLabel">שם חפץ:</string>
+    <string name="itemIDLabel">מזהה חפץ (ID):</string>
+    <string name="add">הוסף</string>
+    <string name="cancel">ביטול</string>
+    <string name="equipmentFilter">מסנן ציוד</string>
+    <string name="showNonTakenItems">הצג חפצים לא מושאלים</string>
+    <string name="orderByLabel">סדר לפי:</string>
+    <string name="item">חפץ</string>
+    <string name="date">תאריך</string>
+    <string name="lender">משאיל</string>
+    <string name="confirm">אישור</string>
+    <string name="loginTeacherTitle">הכנס את הסיסמה לגישות המורים כדי להמשיך:</string>
 </resources>

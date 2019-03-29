@@ -8,7 +8,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="end"
-        android:padding="10dp" />
+        android:padding="10dp"
+        android:contentDescription="@string/item"/>
 
     <LinearLayout
         android:layout_width="0dp"
@@ -35,7 +36,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_menu_delete"
-        android:id="@+id/btnDelete"/>
+        android:id="@+id/btnDelete"
+        android:contentDescription="@string/delete"/>
 
 
 </LinearLayout>

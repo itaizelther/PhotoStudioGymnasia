@@ -1,7 +1,6 @@
 package il.appclass.zelther.photostudiogymnasia;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,7 +22,7 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
 
     private static EquipmentList equipmentList;
     private DataLoaderListener dataLoaderListener;
-    private FirebaseFirestore db;
+    private final FirebaseFirestore db;
     private ListenerRegistration listenerRegistration;
 
     private EquipmentList() {
@@ -42,7 +41,7 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
 
 
     /**
-     * Load new data to this array from the firestore cloud, and assigning a real time listener for changes.
+     * Load new data to this array from the Firestore cloud, and assigning a real time listener for changes.
      * @param dll Listener for real time changes in the list
      * @param tk whether to take only taken items or only non taken items, or both
      * @param orderBy name of field to order the list by
@@ -153,7 +152,7 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
      */
     public interface DataLoaderListener {
         /**
-         * Called each time a changed has been made in the firestore cloud.
+         * Called each time a changed has been made in the Firestore cloud.
          * @param isOk whether the load has been successful or not.
          */
         void dataLoadChange(boolean isOk);

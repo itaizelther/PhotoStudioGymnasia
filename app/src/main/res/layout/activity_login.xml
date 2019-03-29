@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,63 +12,73 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ברוכים הבאים לאפליקצית הסטודיו לצילום של הגימנסיה העברית הרצליה! נא הכנס את שמך המלא וסיסמת האפליקציה בשדות המתאימים."
-        android:textSize="25dp"
+        android:text="@string/loginTitle"
+        android:textSize="25sp"
         android:fontFamily="@font/assistant_font"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        tools:targetApi="jelly_bean" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/assistant_font"
         android:textColor="@android:color/holo_red_light"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:id="@+id/tvLoginError"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        tools:targetApi="jelly_bean" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="100"
+        android:weightSum="20"
         android:layout_marginTop="20dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="20"
+            android:layout_weight="5"
             android:fontFamily="@font/assistant_font"
-            android:text="שם מלא:"
-            android:textSize="20dp" />
+            android:text="@string/fullNameLabel"
+            android:textSize="20sp"
+            android:labelFor="@id/etName"
+            tools:targetApi="jelly_bean" />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/assistant_font"
-            android:layout_weight="80"
-            android:id="@+id/etName"/>
+            android:layout_weight="15"
+            android:id="@+id/etName"
+            android:inputType="text"
+            tools:targetApi="jelly_bean" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="100">
+        android:weightSum="20">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="סיסמה:"
+            android:text="@string/passwordLabel"
             android:fontFamily="@font/assistant_font"
-            android:textSize="20dp"
-            android:layout_weight="20"/>
+            android:textSize="20sp"
+            android:layout_weight="5"
+            android:labelFor="@id/etPassword"
+            tools:targetApi="jelly_bean" />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/assistant_font"
-            android:layout_weight="80"
+            android:layout_weight="15"
             android:id="@+id/etPassword"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            android:gravity="end"
+            tools:targetApi="jelly_bean" />
 
     </LinearLayout>
 
@@ -77,8 +86,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/assistant_font"
-        android:text="כניסה"
+        android:text="@string/login"
         android:id="@+id/btnLogin"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        tools:targetApi="jelly_bean" />
 
 </LinearLayout>

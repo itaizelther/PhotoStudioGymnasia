@@ -24,8 +24,6 @@ import android.widget.Toast;
 public class TeachersActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, EquipmentList.DataLoaderListener, EquipmentList.DataUploadListener, View.OnClickListener, EquipmentList.DataDeleteListener {
 
 
-    private ListView lvTeachers;
-    private SearchView searchTeachers;
     private EquipmentList equipmentList;
     private ArrayAdapter<StudioItem> listAdapter;
     private GraySquareLoadingView animLoading;
@@ -36,8 +34,8 @@ public class TeachersActivity extends AppCompatActivity implements SearchView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teachers);
 
-        lvTeachers = findViewById(R.id.lvTeachers);
-        searchTeachers = findViewById(R.id.searchTeachers);
+        ListView lvTeachers = findViewById(R.id.lvTeachers);
+        SearchView searchTeachers = findViewById(R.id.searchTeachers);
         animLoading = findViewById(R.id.animLoading);
 
         equipmentList = EquipmentList.sharedInstance();

@@ -10,7 +10,7 @@ import android.view.animation.RotateAnimation;
 
 public class GraySquareLoadingView extends View {
 
-    RotateAnimation rotateAnimation;
+    private final RotateAnimation rotateAnimation;
 
     {
         rotateAnimation = new RotateAnimation(0,360, Animation.RELATIVE_TO_SELF,0.5f,Animation.RELATIVE_TO_SELF,0.5f);

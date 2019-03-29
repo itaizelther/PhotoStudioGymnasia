@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,12 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/app_logo"/>
+        android:src="@drawable/app_logo"
+        android:contentDescription="@string/app_name"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="אפליקצית הציוד של מגמת צילום"
+        android:text="@string/appTitle"
         android:layout_gravity="center"
         android:textSize="25sp"
         android:fontFamily="@font/assistant_font"/>
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="הגימנסיה העברית הרצליה"
+        android:text="@string/herzliyaHebrewGymnasium"
         android:textSize="20sp"
         android:fontFamily="@font/assistant_font"/>
 
@@ -43,8 +43,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:text="שאילת ציוד"
-            android:textSize="30dp"
+            android:text="@string/lendEquipment"
+            android:textSize="30sp"
             android:fontFamily="@font/assistant_font"
             android:id="@+id/btnLend"
             android:onClick="onButtonAction"/>
@@ -53,8 +53,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="החזרת ציוד"
-            android:textSize="30dp"
+            android:text="@string/returnEquipment"
+            android:textSize="30sp"
             android:fontFamily="@font/assistant_font"
             android:id="@+id/btnReturn"
             android:onClick="onButtonAction"/>
@@ -62,9 +62,9 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ניהול רשימת ציוד"
+            android:text="@string/manageEquipmentList"
             android:fontFamily="@font/assistant_font"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textColor="#6B117A"
             android:visibility="gone"
             android:id="@+id/btnManageDatabase"

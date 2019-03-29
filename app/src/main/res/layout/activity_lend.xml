@@ -29,18 +29,19 @@
             android:id="@+id/tvLendSubTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="בחר פריט מהרשימה או"
+            android:text="@string/chooseItemTitle"
             android:textSize="20sp"
             app:fontFamily="@font/assistant_font" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:text="סרוק קוד"
+            android:layout_marginStart="15dp"
+            android:text="@string/scanCode"
             android:fontFamily="@font/assistant_font"
             android:textSize="20sp"
-            android:onClick="onBarcodeRequest"/>
+            android:onClick="onBarcodeRequest"
+            tools:targetApi="jelly_bean" />
 
 
     </LinearLayout>
@@ -63,7 +64,8 @@
             android:layout_height="match_parent"
             android:id="@+id/lvLend"
             android:visibility="gone"
-            android:layoutDirection="ltr">
+            android:layoutDirection="ltr"
+            tools:targetApi="jelly_bean_mr1">
 
         </ListView>
 
@@ -77,11 +79,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="אין חפצים זמינים ברשימה זאת."
+            android:text="@string/noAvailableItems"
             android:fontFamily="@font/assistant_font"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:id="@+id/tvEmptyList"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            tools:targetApi="jelly_bean" />
 
     </FrameLayout>
 
