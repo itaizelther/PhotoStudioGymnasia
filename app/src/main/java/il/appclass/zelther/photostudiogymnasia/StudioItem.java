@@ -3,6 +3,7 @@ package il.appclass.zelther.photostudiogymnasia;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -50,16 +51,19 @@ public class StudioItem {
         // The class is being initialize twice: once without the time and once with it. I don't know why this happens,
         // but making this if for preventing a call on null object fixes it.
         String date = null;
-        if(lastUsed != null)
-            date = DateFormat.getDateInstance().format(lastUsed);
+        if(lastUsed != null){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(lastUsed);
+            date = calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH)+1) + "/" + calendar.get(Calendar.YEAR);
+        }
 
         if(taken) {
-            return "Taken by: " + owner + " in " + date + ".";
+            return "נשאל על ידי " + owner + " ב-" + date + ".";
         } else {
             if(owner != null) {
-                return "Retrieved to the studio by " + owner + " in " + date + ".";
+                return "הוחזר לסטודיו על ידי " + owner + " ב-" + date + ".";
             } else {
-                return "In the studio.";
+                return "נמצא כעת בסטודיו.";
             }
         }
     }

@@ -57,7 +57,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
         }
         else {
             tvLendTitle.setText("החזרת ציוד");
-            tvEmptyList.setText("לא השאלת אף חפץ");
+            tvEmptyList.setText("לא שאלת אף חפץ");
         }
 
         animLoading = findViewById(R.id.animLoading);
@@ -123,7 +123,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
     public void dataUploadDidComplete(boolean isOk, StudioItem item) {
         if(isOk) {
             if(toLend) {
-                Toast.makeText(LendActivity.this,"השאלת את הפריט בהצלחה!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(LendActivity.this,"שאלת את הפריט בהצלחה!",Toast.LENGTH_SHORT).show();
                 scheduleNotification(item, false);
             } else {
                 Toast.makeText(LendActivity.this, "החזרת את הפריט בהצלחה!", Toast.LENGTH_SHORT).show();
@@ -156,7 +156,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
                 .setTitle("אישור")
                 .setPositiveButton("כן", clickListener)
                 .setNegativeButton("לא", clickListener);
-        builder.setMessage( toLend ? "האם אתה רוצה להשאיל את "+item.toString() + "?" : "האם אתה רוצה להחזיר את "+item.toString() + "?");
+        builder.setMessage( toLend ? "האם אתה רוצה לשאול את "+item.toString() + "?" : "האם אתה רוצה להחזיר את "+item.toString() + "?");
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
@@ -203,8 +203,8 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private void scheduleNotification(StudioItem item, boolean cancel) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
-        String message = "עבר שבוע מאז שהשאלת את "+item.toString()+". נא זכור להחזיר אותו לסטודיו!";
-        builder.setContentTitle("תזכורת להשאלת פריט").setSmallIcon(R.drawable.app_notification_logo).setStyle(new NotificationCompat.BigTextStyle().bigText(message)).setGroup(NOTIFICATION_GROUP_REMINDER_ID);
+        String message = "עבר שבוע מאז ששאלת את "+item.toString()+". נא זכור להחזיר אותו לסטודיו!";
+        builder.setContentTitle("תזכורת לשאילת פריט").setSmallIcon(R.drawable.app_notification_logo).setStyle(new NotificationCompat.BigTextStyle().bigText(message)).setGroup(NOTIFICATION_GROUP_REMINDER_ID);
         Notification notification = builder.build();
         delayNotification(notification, 15000, item.getId().hashCode(), cancel);
     }
