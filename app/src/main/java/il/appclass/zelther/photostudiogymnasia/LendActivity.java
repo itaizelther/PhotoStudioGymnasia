@@ -146,7 +146,13 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
                 if(which == DialogInterface.BUTTON_NEGATIVE)
                     dialog.cancel();
                 else {
-                    equipmentList.uploadUpdatedData(LendActivity.this, item, toLend, username);
+                    if(equipmentList.searchForID(item.getId()) != null){
+                        equipmentList.uploadUpdatedData(LendActivity.this, item, toLend, username);
+                    } else {
+                        AlertDialog alertDialog = new AlertDialog.Builder(LendActivity.this).setMessage("מישהו אחר כבר לקח את הפריט.")
+                                .setTitle("שגיאה!").create();
+                        alertDialog.show();
+                    }
                 }
             }
         };
@@ -206,7 +212,7 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
         String message = "עבר שבוע מאז ששאלת את "+item.toString()+". נא זכור להחזיר אותו לסטודיו!";
         builder.setContentTitle("תזכורת לשאילת פריט").setSmallIcon(R.drawable.app_notification_logo).setStyle(new NotificationCompat.BigTextStyle().bigText(message)).setGroup(NOTIFICATION_GROUP_REMINDER_ID);
         Notification notification = builder.build();
-        delayNotification(notification, 15000, item.getId().hashCode(), cancel);
+        delayNotification(notification, 604800000, item.getId().hashCode(), cancel);
     }
 
     private void delayNotification(Notification notification, int delay, int requestCode, boolean cancel) {
