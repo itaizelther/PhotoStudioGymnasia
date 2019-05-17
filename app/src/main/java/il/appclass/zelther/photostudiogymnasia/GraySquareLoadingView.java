@@ -8,6 +8,12 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 
+/**
+ * This class represents the gray square animation when the system loads the data from the cloud
+ * @author Itai Zelther
+ * @see LendActivity
+ * @see TeachersActivity
+ */
 public class GraySquareLoadingView extends View {
 
     private final RotateAnimation rotateAnimation;

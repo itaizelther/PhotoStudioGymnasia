@@ -7,6 +7,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+/**
+ * This class is used as a BroadcastReceiver for notifications usage. When the user lends item, the system starts an alarm to active this broadcast receiver a week ahead.
+ * The class publishes the notification which has been given on intent.
+ * @author Itai Zelther
+ * @see LendActivity
+ */
 public class NotificationPublisher extends BroadcastReceiver {
 
     public static final String NOTIFICATION_ID = "notification-id";
@@ -24,6 +30,10 @@ public class NotificationPublisher extends BroadcastReceiver {
 
     }
 
+    /**
+     * Creates notifications channel for newer versions of Android.
+     * @param context The context given by the receiver.
+     */
     private void createChannel(Context context) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

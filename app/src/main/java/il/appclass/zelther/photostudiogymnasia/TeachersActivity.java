@@ -21,6 +21,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * This class represent the screen of teachers area. In this activity, the user can manage the items' database, add edit and delete. The user can also see the current
+ * state of each item, search and filter the list.
+ * @author Itai Zelther
+ * @see MainActivity
+ */
 public class TeachersActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, EquipmentList.DataLoaderListener, EquipmentList.DataUploadListener, View.OnClickListener, EquipmentList.DataDeleteListener {
 
 

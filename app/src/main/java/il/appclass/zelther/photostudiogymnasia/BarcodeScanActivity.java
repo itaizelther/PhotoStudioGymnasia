@@ -19,6 +19,11 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
+/**
+ * This activity is used for the barcode scanning screen. When a user want to select item by scanning it's barcode, he will be moved from LendActivity to here.
+ * @author Itai Zelther
+ * @see LendActivity
+ */
 public class BarcodeScanActivity extends AppCompatActivity {
 
 

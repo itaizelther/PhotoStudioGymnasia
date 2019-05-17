@@ -18,6 +18,13 @@ import java.util.HashMap;
 
 import javax.annotation.Nullable;
 
+/**
+ * This class, which inherit from ArrayList, is used to store the studio's items list.
+ * It has several functions to deal with the cloud on firestore management, as: read, update, add and delete.
+ * @author Itai Zelther
+ * @see LendActivity
+ * @see TeachersActivity
+ */
 public class EquipmentList extends ArrayList<StudioItem> implements EventListener<QuerySnapshot> {
 
     private static EquipmentList equipmentList;
@@ -189,6 +196,9 @@ public class EquipmentList extends ArrayList<StudioItem> implements EventListene
         void dataDeleteDidComplete(boolean isOk);
     }
 
+    /**
+     * An enum including options to filter by the "taken" parameter.
+     */
     public enum TakenFilter {
         ONLY_TAKEN, ONLY_NON_TAKEN, BOTH
     }

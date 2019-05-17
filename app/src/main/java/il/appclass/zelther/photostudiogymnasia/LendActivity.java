@@ -207,6 +207,11 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
+    /**
+     * This method schedule a unique notification for a specific item the user has chosen, or cancels an already scheduled notification.
+     * @param item The item which the notification will be reminding of.
+     * @param cancel Whether to schedule a new notification, or cancel an already scheduled one.
+     */
     private void scheduleNotification(StudioItem item, boolean cancel) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
         String message = "עבר שבוע מאז ששאלת את "+item.toString()+". נא זכור להחזיר אותו לסטודיו!";
@@ -215,6 +220,14 @@ public class LendActivity extends AppCompatActivity implements SearchView.OnQuer
         delayNotification(notification, 604800000, item.getId().hashCode(), cancel);
     }
 
+    /**
+     * This method is called by the {@link #scheduleNotification(StudioItem, boolean)} method. It scheduled a notification that is given, with a delay which is also given in milliseconds.
+     * This method should never be called unless by the scheduleNotification() method.
+     * @param notification The Notification object to display.
+     * @param delay The delay in milliseconds
+     * @param requestCode Unique code which should be given with each item, so the program will be able to cancel the notification if needed in the future.
+     * @param cancel Whether to schedule a new notification or cancel an already scheduled one.
+     */
     private void delayNotification(Notification notification, int delay, int requestCode, boolean cancel) {
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, requestCode);
